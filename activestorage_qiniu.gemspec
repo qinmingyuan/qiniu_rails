@@ -9,14 +9,12 @@ Gem::Specification.new do |s|
   s.version     = ActivestorageQiniu::VERSION
   s.authors     = ["qinmingyuan"]
   s.email       = ["mingyuan0715@foxmail.com"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of ActivestorageQiniu."
-  s.description = "TODO: Description of ActivestorageQiniu."
+  s.homepage    = 'https://github.com/qinmingyuan/activestorage_qiniu'
+  s.summary     = "Summary of ActivestorageQiniu."
+  s.description = "Description of ActivestorageQiniu."
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
   s.add_dependency "rails", "~> 5.1.4"
-
-  s.add_development_dependency "sqlite3"
 end
