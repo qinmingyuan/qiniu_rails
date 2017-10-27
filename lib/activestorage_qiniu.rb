@@ -1,3 +1,3 @@
+require 'active_storage/service/qiniu_service'
 module ActivestorageQiniu
-  # Your code goes here...
 end
