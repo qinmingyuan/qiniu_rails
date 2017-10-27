@@ -1,0 +1,3 @@
+module ActivestorageQiniu
+  # Your code goes here...
+end
