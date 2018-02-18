@@ -1,5 +1,6 @@
 # ActivestorageQiniu
-Short description and motivation.
+qiniu backend for activestore
+
 
 ## Usage
 
