@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'qiniu'
 module QiniuCommon
   attr_reader :host, :bucket
 
@@ -19,8 +20,8 @@ module QiniuCommon
     result['items']
   end
 
-  def generate_uptoken(key = nil, **options)
-    put_policy = Qiniu::Auth::PutPolicy.new(bucket, key)
+  def generate_uptoken(key = nil, expires_in: Qiniu::Auth::DEFAULT_AUTH_SECONDS, deadline: nil,  **options)
+    put_policy = Qiniu::Auth::PutPolicy.new(bucket, key, expires_in, deadline)
     options.slice(*Qiniu::Auth::PutPolicy::PARAMS.keys).each do |k, v|
       put_policy.send("#{k}=", v)
     end

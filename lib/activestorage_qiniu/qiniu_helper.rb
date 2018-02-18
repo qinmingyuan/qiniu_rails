@@ -5,7 +5,7 @@ require 'activestorage_qiniu'
 module QiniuHelper
   extend QiniuCommon
   extend self
-  @config ||= Rails.application.config_for('qiniu')
+  @config ||= Rails.configuration.active_storage['service_configurations']['qiniu']
   @host ||= @config['host']
   @bucket ||= @config['bucket']
 
@@ -14,8 +14,10 @@ module QiniuHelper
   end
 
   def qiniu_url(key)
-    host << '/' unless host.end_with? '/'
-    host + key.to_s
+    _host = host
+    _host = host + '/' unless _host.end_with? '/'
+    _host = 'http://' + _host unless _host.start_with? 'http://'
+    _host + key.to_s
   end
 
   def upload(local_file, key = nil, **options)
@@ -30,6 +32,5 @@ module QiniuHelper
     )
     code
   end
-
 
 end

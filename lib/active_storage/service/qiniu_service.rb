@@ -1,10 +1,11 @@
 # frozen_string_literal: true
-require 'activestorage_qiniu/qiniu_helper'
+require 'activestorage_qiniu/qiniu_common'
 
 module ActiveStorage
   # Wraps the Qiniu Cloud Storage as an Active Storage service. See ActiveStorage::Service for the generic API
   # documentation that applies to all services.
   class Service::QiniuService < Service
+    include QiniuCommon
     attr_reader :client
 
     def initialize(host:, secret_key:, access_key:, bucket:, **options)
@@ -18,28 +19,25 @@ module ActiveStorage
         begin
           code, result, response_headers = upload_verbose(io, key, options)
           result['key']
-        rescue
+        rescue => e
+          puts e.backtrace
           raise ActiveStorage::IntegrityError
         end
       end
     end
 
     def delete(key)
-      instrument :delete, key do
+      instrument :delete, key: key do
         begin
-          code, result, response_headers = Qiniu::Storage.delete(
-            bucket,
-            key
-          )
-          code
-        rescue
-          # Ignore files already deleted
+          Qiniu::Storage.delete(bucket, key)
+        rescue => e
+          puts e.backtrace
         end
       end
     end
 
     def exist?(key)
-      instrument :exist, key do |payload|
+      instrument :exist, key: key do |payload|
         answer = file_for(key)
         payload[:exist] = answer
       end
