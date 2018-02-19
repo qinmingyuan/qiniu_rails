@@ -1,6 +1,10 @@
 # Qiniu Rails
-qiniu backend for activestorage
+qiniu backend for activestorage and more
 
+## Features
+* Qiniu backend for activestorage;
+* QiniuHelper for simple divided use;
+* Qiniu extends for sprockets
 
 ## Usage
 
