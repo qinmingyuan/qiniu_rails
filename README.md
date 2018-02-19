@@ -1,9 +1,8 @@
-# ActivestorageQiniu
-qiniu backend for activestore
+# Qiniu Rails
+qiniu backend for activestorage
 
 
 ## Usage
-
 
 ```yaml
 qiniu:
