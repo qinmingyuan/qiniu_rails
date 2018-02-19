@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'activestorage_qiniu/qiniu_common'
+require 'qiniu_rails/qiniu_common'
 
 module ActiveStorage
   # Wraps the Qiniu Cloud Storage as an Active Storage service. See ActiveStorage::Service for the generic API

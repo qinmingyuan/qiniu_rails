@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 require 'qiniu'
-require 'activestorage_qiniu'
+require 'qiniu_rails/qiniu_common'
 
 module QiniuHelper
   extend QiniuCommon
