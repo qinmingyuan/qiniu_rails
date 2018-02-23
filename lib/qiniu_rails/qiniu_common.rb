@@ -3,7 +3,6 @@ require 'qiniu'
 module QiniuCommon
   attr_reader :host, :bucket
 
-  private
   def upload_verbose(local_file, key = nil, **options)
     code, result, response_headers = Qiniu::Storage.upload_with_token_2(
       generate_uptoken(key, options),
