@@ -45,7 +45,17 @@ module ActiveStorage
 
     def url(key, **options)
       instrument :url, key: key do |payload|
-        Qiniu::Auth.authorize_download_url_2(host, key)
+        url = Qiniu::Auth.authorize_download_url_2(host, key)
+        payload[:url] = url
+        url
+      end
+    end
+
+    def url_for_direct_upload(key, expires_in:, content_type:, content_length:, checksum:)
+      instrument :url, key: key do |payload|
+        url = Qiniu::Config.up_host(bucket)
+        payload[:url] = url
+        url
       end
     end
 
