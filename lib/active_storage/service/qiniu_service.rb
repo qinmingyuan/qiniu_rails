@@ -6,12 +6,18 @@ module ActiveStorage
   # documentation that applies to all services.
   class Service::QiniuService < Service
     include QiniuCommon
-    attr_reader :client
+    attr_reader :client, :protocol
 
     def initialize(host:, secret_key:, access_key:, bucket:, **options)
-      @client = Qiniu.establish_connection!(access_key: access_key, secret_key: secret_key)
       @host = host
       @bucket = bucket
+      @protocol = (options.delete(:protocol) || 'https').to_sym
+      @client = Qiniu.establish_connection!(
+        access_key: access_key,
+        secret_key: secret_key,
+        protocal: @protocal,
+        **options
+      )
     end
 
     def upload(key, io, checksum: nil, **options)
@@ -45,7 +51,7 @@ module ActiveStorage
 
     def url(key, **options)
       instrument :url, key: key do |payload|
-        url = Qiniu::Auth.authorize_download_url_2(host, key)
+        url = Qiniu::Auth.authorize_download_url_2(host, key, schema: protocol)
         payload[:url] = url
         url
       end
