@@ -3,7 +3,7 @@ qiniu backend for activestorage and more
 
 ## Features
 * Qiniu backend for activestorage;
-* QiniuHelper for simple divided use;
+* QiniuHelper for simple independent use;
 * Qiniu extends for sprockets
 
 ## Config
