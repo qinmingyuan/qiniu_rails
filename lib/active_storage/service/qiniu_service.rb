@@ -57,16 +57,30 @@ module ActiveStorage
       end
     end
 
+    def download_chunk(key, range)
+      instrument :download_chunk, key: key, range: range do
+        uri = URI(url(key, expires_in: 30.seconds, attname: 'download'))
+        Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https") do |client|
+          client.get(uri, 'Range' => "bytes=#{range.begin}-#{range.exclude_end? ? range.end - 1 : range.end}").body
+        end
+      end
+    end
+
     def url_for_direct_upload(key, expires_in:, content_type:, content_length:, checksum:)
       instrument :url, key: key do |payload|
-        url = Qiniu::Config.up_host(bucket)
+        url = Qiniu::Config.up_host(bucket) + "/mkblk/#{content_length}"
         payload[:url] = url
         url
       end
     end
 
-    def headers_for_direct_upload(key, content_type:, checksum:, **)
-      { 'Content-Type' => content_type, 'Content-MD5' => checksum, 'x-token' => generate_uptoken(key) }
+    def headers_for_direct_upload(key, filename:, content_type:, content_length:, checksum:)
+      {
+        'Content-Type' => 'application/octet-stream',
+        'Content-MD5' => checksum,
+        'Content-Length' => content_length,
+        'Authorization' => "UpToken #{generate_uptoken(key)}"
+      }
     end
 
   end
