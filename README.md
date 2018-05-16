@@ -56,6 +56,10 @@ Or install it yourself as:
 $ gem install qiniu_rails
 ```
 
+## Direct Upload
+* dependent on JS http client sdk `axios`, please add it to your rails project first;
+* then `require qiniu_direct_upload` in js file where you used qiniu direct upload;
+
 ## Contributing
 Contribution directions go here.
 
