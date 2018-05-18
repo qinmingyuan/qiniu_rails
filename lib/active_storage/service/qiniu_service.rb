@@ -51,7 +51,7 @@ module ActiveStorage
 
     def url(key, **options)
       instrument :url, key: key do |payload|
-        url = Qiniu::Auth.authorize_download_url_2(host, key, schema: protocol)
+        url = Qiniu::Auth.authorize_download_url_2(host, key, fop: options[:fop], expires_in: options[:expires_in], schema: protocol)
         payload[:url] = url
         url
       end
