@@ -60,6 +60,9 @@ $ gem install qiniu_rails
 * dependent on JS http client sdk `axios`, please add it to your rails project first;
 * then `require qiniu_direct_upload` in js file where you used qiniu direct upload;
 
+## Assets Sync(Sprockets) support
+* add `Sprockets.sync = 'qiniu'` to your initializers file
+
 ## Contributing
 Contribution directions go here.
 
