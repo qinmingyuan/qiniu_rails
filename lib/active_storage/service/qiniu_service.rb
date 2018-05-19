@@ -55,20 +55,40 @@ module ActiveStorage
       end
     end
 
-    def url(key, **options)
-      instrument :url, key: key do |payload|
-        url = Qiniu::Auth.authorize_download_url_2(host, key, fop: options[:fop], expires_in: options[:expires_in], schema: protocol)
-        payload[:url] = url
-        url
+    def download(key, &block)
+      if block_given?
+        instrument :streaming_download, key: key do
+          open(url(key, attname: key)) do |file|
+            while data = file.read(64.kilobytes)
+              yield data
+            end
+          end
+        end
+      else
+        instrument :download, key: key do
+          open(url(key, attname: key)).read
+        end
       end
     end
 
     def download_chunk(key, range)
       instrument :download_chunk, key: key, range: range do
-        uri = URI(url(key, expires_in: 30.seconds, attname: 'download'))
+        uri = URI(url(key, expires_in: 30.seconds, attname: key))
         Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https") do |client|
           client.get(uri, 'Range' => "bytes=#{range.begin}-#{range.exclude_end? ? range.end - 1 : range.end}").body
         end
+      end
+    end
+
+    def url(key, **options)
+      instrument :url, key: key do |payload|
+        if options[:attname].present?
+          options[:fop] = options[:fop].to_s + '&'
+          options[:fop] << "attname=#{URI.escape(options[:attname])}"
+        end
+        url = Qiniu::Auth.authorize_download_url_2(host, key, fop: options[:fop], expires_in: options[:expires_in], schema: protocol)
+        payload[:url] = url
+        url
       end
     end
 
@@ -86,6 +106,20 @@ module ActiveStorage
         'Content-MD5' => checksum,
         'Authorization' => "UpToken #{generate_uptoken(key)}"
       }
+    end
+
+    private
+    # Reads the object for the given key in chunks, yielding each to the block.
+    def stream(key)
+      object = object_for(key)
+
+      chunk_size = 5.megabytes
+      offset = 0
+
+      while offset < object.content_length
+        yield object.get(range: "bytes=#{offset}-#{offset + chunk_size - 1}").body.read.force_encoding(Encoding::BINARY)
+        offset += chunk_size
+      end
     end
 
   end
