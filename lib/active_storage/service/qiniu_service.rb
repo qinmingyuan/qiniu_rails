@@ -42,6 +42,12 @@ module ActiveStorage
       end
     end
 
+    def delete_prefixed(prefix)
+      instrument :delete_prefixed, prefix: prefix do
+        file_for(prefix).each { |item| delete item['key'] }
+      end
+    end
+
     def exist?(key)
       instrument :exist, key: key do |payload|
         answer = file_for(key)
@@ -78,7 +84,6 @@ module ActiveStorage
       {
         'Content-Type' => 'application/octet-stream',
         'Content-MD5' => checksum,
-        'Content-Length' => content_length,
         'Authorization' => "UpToken #{generate_uptoken(key)}"
       }
     end
