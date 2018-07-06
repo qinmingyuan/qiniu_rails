@@ -1,9 +1,14 @@
 module ActiveStorage
-  module Analyzer
+  class Analyzer
     class QiniuVideoAnalyzer < VideoAnalyzer
 
       def metadata
-        {width: width, height: height, duration: duration, aspect_ratio: aspect_ratio}.compact
+        {
+          width: width,
+          height: height,
+          duration: duration,
+          aspect_ratio: aspect_ratio
+        }.compact
       rescue
         {}
       end
@@ -34,7 +39,7 @@ module ActiveStorage
       end
 
       def video_stream
-        @video_stream ||= streams.detect { |stream| stream["codec_type"] == "video" } || {}
+        @video_stream ||= streams.detect { |stream| stream['codec_type'] == 'video' } || {}
       end
     end
   end

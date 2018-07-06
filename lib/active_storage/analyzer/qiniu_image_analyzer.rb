@@ -1,5 +1,5 @@
 module ActiveStorage
-  module Analyzer
+  class Analyzer
     class QiniuImageAnalyzer < ImageAnalyzer
 
       def metadata

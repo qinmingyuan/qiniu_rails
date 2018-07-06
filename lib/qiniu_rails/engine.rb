@@ -8,7 +8,7 @@ module QiniuRails
       end
     end
 
-    initalizer 'qiniu_rails.analyzers' do |app|
+    initializer 'qiniu_rails.analyzers' do |app|
       app.config.active_storage.analyzers = [
         ActiveStorage::Analyzer::QiniuImageAnalyzer,
         ActiveStorage::Analyzer::QiniuVideoAnalyzer
