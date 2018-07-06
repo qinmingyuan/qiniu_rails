@@ -9,10 +9,12 @@ module QiniuRails
     end
 
     initializer 'qiniu_rails.analyzers' do |app|
-      app.config.active_storage.analyzers = [
-        ActiveStorage::Analyzer::QiniuImageAnalyzer,
-        ActiveStorage::Analyzer::QiniuVideoAnalyzer
-      ]
+      if ActiveStorage::Blob.service.is_a?(ActiveStorage::Service::QiniuService)
+        app.config.active_storage.analyzers = [
+          ActiveStorage::Analyzer::QiniuImageAnalyzer,
+          ActiveStorage::Analyzer::QiniuVideoAnalyzer
+        ]
+      end
     end
 
   end
