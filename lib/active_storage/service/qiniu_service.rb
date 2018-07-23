@@ -82,9 +82,10 @@ module ActiveStorage
 
     def url(key, **options)
       instrument :url, key: key do |payload|
-        if options[:attname].present?
-          options[:fop] = options[:fop].to_s + '&'
-          options[:fop] << "attname=#{URI.escape(options[:attname])}"
+        if options[:filename].present?
+          options[:fop] ||= ''
+          options[:fop] = options[:fop] + '&' unless options[:fop].end_with?('&')
+          options[:fop] = options[:fop] + "attname=#{URI.escape(options[:filename].to_s)}"
         end
         url = Qiniu::Auth.authorize_download_url_2(host, key, fop: options[:fop], expires_in: options[:expires_in], schema: protocol)
         payload[:url] = url
