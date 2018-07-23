@@ -84,7 +84,7 @@ module ActiveStorage
       instrument :url, key: key do |payload|
         if options[:filename].present?
           options[:fop] ||= ''
-          options[:fop] = options[:fop] + '&' unless options[:fop].end_with?('&')
+          options[:fop] = options[:fop] + '&' unless options[:fop].blank? || options[:fop].end_with?('&')
           options[:fop] = options[:fop] + "attname=#{URI.escape(options[:filename].to_s)}"
         end
         url = Qiniu::Auth.authorize_download_url_2(host, key, fop: options[:fop], expires_in: options[:expires_in], schema: protocol)
