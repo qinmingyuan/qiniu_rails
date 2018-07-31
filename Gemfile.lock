@@ -3,7 +3,7 @@ PATH
   specs:
     qiniu_rails (0.1.0)
       qiniu
-      rails (= 5.2.0)
+      rails (>= 5.2.0)
       sprockets
 
 GEM
