@@ -102,10 +102,12 @@ module ActiveStorage
     end
 
     def headers_for_direct_upload(key, filename:, content_type:, content_length:, checksum:)
+      uptoken = generate_uptoken(key)
       {
         'Content-Type' => 'application/octet-stream',
         'Content-MD5' => checksum,
-        'Authorization' => "UpToken #{generate_uptoken(key)}"
+        'Authorization' => "UpToken #{uptoken}",
+        'Up-Token' => uptoken
       }
     end
 
