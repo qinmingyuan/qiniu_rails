@@ -5,7 +5,7 @@ require 'qiniu_rails/qiniu_common'
 module QiniuHelper
   extend QiniuCommon
   extend self
-  @config ||= Rails.configuration.active_storage['service_configurations']['qiniu']
+  @config ||= Rails.configuration.active_storage['service_configurations'][Rails.configuration.active_storage['service'].to_s]
   @host ||= @config['host']
   @bucket ||= @config['bucket']
 
