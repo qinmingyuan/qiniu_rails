@@ -1,6 +1,9 @@
 module ActiveStorage
   class Analyzer
     class QiniuVideoAnalyzer < VideoAnalyzer
+      def self.accept?(blob)
+        blob.video? || blob.audio?
+      end
 
       def metadata
         {
@@ -39,7 +42,7 @@ module ActiveStorage
       end
 
       def video_stream
-        @video_stream ||= streams.detect { |stream| stream['codec_type'] == 'video' } || {}
+        @video_stream ||= streams.detect { |stream| ['video', 'audio'].include? stream['codec_type'] } || {}
       end
     end
   end
