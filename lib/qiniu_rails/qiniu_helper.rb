@@ -28,7 +28,7 @@ module QiniuHelper
 
   def av_concat(key, format: 'mp3', index: 2, keys: [])
     urls = keys.map { |k| Qiniu::Utils.urlsafe_base64_encode download_url(k) }
-    saveas_key = Qiniu::Utils.urlsafe_base64_encode("#{bucket}:#{key}")
+    saveas_key = Qiniu::Utils.urlsafe_base64_encode("#{bucket}:00_#{key}")
     api = "avconcat/2/format/#{format}/index/#{index}/" + urls.join('/')
     fops = api + '|saveas/' + saveas_key
 
@@ -39,12 +39,14 @@ module QiniuHelper
       @config['notify_url']
     )
     code, result, response_headers = Qiniu::Fop::Persistance.pfop(pfops)
+    puts result
     result
-    binding.pry
   end
 
   def prefop(persistent_id)
-    code, result, response_headers = Qiniu::Fop::Persistance.pfop(persistent_id)
+    code, result, response_headers = Qiniu::Fop::Persistance.prefop(persistent_id)
+    puts result
+    result
   end
 
 end
