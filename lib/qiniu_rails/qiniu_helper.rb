@@ -33,4 +33,21 @@ module QiniuHelper
     code
   end
 
+  def av_concat(key, format: 'mp3')
+    saveas_key = Qiniu::Utils.urlsafe_base64_encode("#{bucket}:#{key}")
+    api = "avconcat/2/format/#{format}/index"
+    fops = api + '|saveas/' + saveas_key
+
+
+    pfops = Qiniu::Fop::Persistance::PfopPolicy.new(
+      bucket,
+      key,
+      fops,
+      @config['notify_url']
+    )
+    pfops.pipeline = pipeline
+    code, result, response_headers = Qiniu::Fop::Persistance.pfop(pfops)
+    result
+  end
+
 end

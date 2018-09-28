@@ -9,34 +9,14 @@ qiniu backend for activestorage and more
 ## Config
 
 ```yaml
-# config/qiniu.yml
-default: &default
-  host: http://examples.com/
-  bucket: 
-  access_key: 
-  secret_key: 
-
-development:
-  <<: *default
-
-staging:
-  <<: *default
-
-test:
-  <<: *default
-
-production:
-  <<: *default
-  host: http://assets.yigexiangfa.com/
-  bucket: example
-  
 # config/storage.yml
 qiniu:
   service: Qiniu
   host: xxxx.com1.z0.glb.clouddn.com  
   access_key: iX6NuM1xN04Wdh-DogI0F3jLVpc-A4CsTHETssss
   secret_key: aN44R3yzJFaeswbyM4Y8YaJvnkmsssssssss
-  bucket: xxxx  
+  bucket: xxxx 
+  notify_url: xxx 
 ```
 
 ## Installation
