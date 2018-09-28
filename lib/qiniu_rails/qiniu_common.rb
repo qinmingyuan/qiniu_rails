@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'qiniu'
 module QiniuCommon
-  attr_reader :host, :bucket
+  attr_reader :host, :bucket, :config
 
   def upload_verbose(local_file, key = nil, **options)
     code, result, response_headers = Qiniu::Storage.upload_with_token_2(

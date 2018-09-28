@@ -1,17 +1,25 @@
-require File.expand_path("../../test/dummy/config/environment.rb", __FILE__)
-ActiveRecord::Migrator.migrations_paths = [File.expand_path("../../test/dummy/db/migrate", __FILE__)]
-require "rails/test_help"
+ENV['RAILS_ENV'] = 'test'
+require_relative '../test/dummy/config/environment'
+require 'rails/test_help'
+require 'minitest/mock'
 
-# Filter out Minitest backtrace while allowing backtrace from other libraries
-# to be shown.
+ActiveRecord::Migrator.migrations_paths = [File.expand_path('../test/dummy/db/migrate', __dir__)]
 Minitest.backtrace_filter = Minitest::BacktraceFilter.new
 
-Rails::TestUnitReporter.executable = 'bin/test'
+if defined?(FactoryBot)
+  FactoryBot.definition_file_paths << QiniuRails::Engine.root.join('test/factories')
+  FactoryBot.find_definitions
+end
 
-# Load fixtures from the engine
-if ActiveSupport::TestCase.respond_to?(:fixture_path=)
-  ActiveSupport::TestCase.fixture_path = File.expand_path("../fixtures", __FILE__)
-  ActionDispatch::IntegrationTest.fixture_path = ActiveSupport::TestCase.fixture_path
-  ActiveSupport::TestCase.file_fixture_path = ActiveSupport::TestCase.fixture_path + "/files"
-  ActiveSupport::TestCase.fixtures :all
+class ActiveSupport::TestCase
+  self.file_fixture_path = File.expand_path('fixtures/files', __dir__)
+  Rails.configuration.active_storage.service = :qiniu
+  ActiveStorage::Current.host = QiniuHelper.host
+  Qiniu.establish_connection!(
+    access_key: QiniuHelper.config['access_key'],
+    secret_key: QiniuHelper.config['secret_key'],
+    protocal: QiniuHelper.config['protocal']
+  )
+
+  include FactoryBot::Syntax::Methods
 end
