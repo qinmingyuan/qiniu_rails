@@ -1,0 +1,21 @@
+en:
+  the_trade_sync:
+    payments:
+      index:
+        add_new: add
+        import: Import
+        init: 预核销
+        confirmed: 未预核销
+      item:
+        edit: Edit
+        destroy: Destroy
+        show: 支付方式
+        checking: 核销
+        analyze: 分析支付方式
+        adjust: 平账
+  activerecord:
+    attributes:
+      sync_audit/state:
+        init: Pending
+        applied: Applied
+        finished: Finished

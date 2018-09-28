@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+ENGINE_ROOT = File.expand_path('..', __dir__)
+ENGINE_PATH = File.expand_path('../lib/qiniu_rails/engine', __dir__)
+APP_PATH = File.expand_path('../test/dummy/config/application', __dir__)
+
+ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../Gemfile', __dir__)
+require 'bundler/setup' if File.exist?(ENV['BUNDLE_GEMFILE'])
+
+require 'rails/all'
+require 'rails/engine/commands'

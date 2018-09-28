@@ -1,0 +1,8 @@
+zh:
+  rails_sync_admin:
+  activerecord:
+    attributes:
+      sync_audit/state:
+        init: Init
+        applied: 已修改
+        finished: 完成
