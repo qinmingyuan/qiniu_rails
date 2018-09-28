@@ -81,6 +81,9 @@ module ActiveStorage
     end
 
     def url(key, **options)
+      if options[:size]
+        key += "-#{options.delete(:size)}"
+      end
       instrument :url, key: key do |payload|
         if options[:filename].present?
           options[:fop] ||= ''
