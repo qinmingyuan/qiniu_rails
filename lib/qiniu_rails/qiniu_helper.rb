@@ -38,7 +38,6 @@ module QiniuHelper
     api = "avconcat/2/format/#{format}/index"
     fops = api + '|saveas/' + saveas_key
 
-
     pfops = Qiniu::Fop::Persistance::PfopPolicy.new(
       bucket,
       key,
