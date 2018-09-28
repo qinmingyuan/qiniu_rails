@@ -13,13 +13,6 @@ module QiniuHelper
     Qiniu::Auth.authorize_download_url_2(host, key)
   end
 
-  def qiniu_url(key)
-    _host = host
-    _host = host + '/' unless _host.end_with? '/'
-    _host = 'http://' + _host unless _host.start_with? 'http://'
-    _host + key.to_s
-  end
-
   def upload(local_file, key = nil, **options)
     code, result, response_headers = upload_verbose(local_file, key, options)
     result['key']
@@ -33,9 +26,10 @@ module QiniuHelper
     code
   end
 
-  def av_concat(key, format: 'mp3')
+  def av_concat(key, format: 'mp3', index: 2, keys: [])
+    urls = keys.map { |k| Qiniu::Utils.urlsafe_base64_encode download_url(k) }
     saveas_key = Qiniu::Utils.urlsafe_base64_encode("#{bucket}:#{key}")
-    api = "avconcat/2/format/#{format}/index"
+    api = "avconcat/2/format/#{format}/index/#{index}/" + urls.join('/')
     fops = api + '|saveas/' + saveas_key
 
     pfops = Qiniu::Fop::Persistance::PfopPolicy.new(
@@ -44,9 +38,13 @@ module QiniuHelper
       fops,
       @config['notify_url']
     )
-    pfops.pipeline = pipeline
     code, result, response_headers = Qiniu::Fop::Persistance.pfop(pfops)
     result
+    binding.pry
+  end
+
+  def prefop(persistent_id)
+    code, result, response_headers = Qiniu::Fop::Persistance.pfop(persistent_id)
   end
 
 end
