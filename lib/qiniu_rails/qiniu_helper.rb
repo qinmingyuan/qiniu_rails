@@ -8,6 +8,7 @@ module QiniuHelper
   @config ||= Rails.configuration.active_storage['service_configurations'][Rails.configuration.active_storage['service'].to_s]
   @host ||= @config['host']
   @bucket ||= @config['bucket']
+  @pipeline ||= @config['pipeline']
 
   def download_url(key)
     Qiniu::Auth.authorize_download_url_2(host, key)
@@ -38,6 +39,8 @@ module QiniuHelper
       fops,
       @config['notify_url']
     )
+    pfops.pipeline = @pipeline
+
     code, result, response_headers = Qiniu::Fop::Persistance.pfop(pfops)
     puts result
     result
