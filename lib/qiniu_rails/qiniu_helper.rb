@@ -10,8 +10,8 @@ module QiniuHelper
   @bucket ||= @config['bucket']
   @pipeline ||= @config['pipeline']
 
-  def download_url(key)
-    Qiniu::Auth.authorize_download_url_2(host, key)
+  def download_url(key, **options)
+    Qiniu::Auth.authorize_download_url_2(host, key, **options)
   end
 
   def upload(local_file, key = nil, **options)
@@ -50,6 +50,11 @@ module QiniuHelper
     code, result, response_headers = Qiniu::Fop::Persistance.prefop(persistent_id)
     puts result
     result
+  end
+
+  def avinfo(key)
+    code, result, res = Qiniu::HTTP.api_get(download_url(key, fop: 'avinfo'))
+    result['streams']
   end
 
 end

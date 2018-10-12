@@ -1,6 +1,7 @@
 module ActiveStorage
   class Analyzer
     class QiniuVideoAnalyzer < VideoAnalyzer
+
       def self.accept?(blob)
         blob.video? || blob.audio?
       end
