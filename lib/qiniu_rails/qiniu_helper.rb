@@ -27,9 +27,9 @@ module QiniuHelper
     code
   end
 
-  def av_concat(key, format: 'mp3', index: 2, keys: [])
+  def av_concat(key, format: 'mp3', index: 2, keys: [], prefix: '00')
     urls = keys.map { |k| Qiniu::Utils.urlsafe_base64_encode download_url(k) }
-    saveas_key = Qiniu::Utils.urlsafe_base64_encode("#{bucket}:00_#{key}")
+    saveas_key = Qiniu::Utils.urlsafe_base64_encode("#{bucket}:#{prefix}_#{key}")
     api = "avconcat/2/format/#{format}/index/#{index}/" + urls.join('/')
     fops = api + '|saveas/' + saveas_key
 
