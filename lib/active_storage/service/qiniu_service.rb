@@ -85,7 +85,7 @@ module ActiveStorage
         key += "-#{options.delete(:size)}"
       end
       instrument :url, key: key do |payload|
-        if options[:filename].present?
+        if options[:filename].present? && options[:disposition].to_s == 'attachment'
           options[:fop] ||= ''
           options[:fop] = options[:fop] + '&' unless options[:fop].blank? || options[:fop].end_with?('&')
           options[:fop] = options[:fop] + "attname=#{URI.escape(options[:filename].to_s)}"
