@@ -6,12 +6,13 @@ module ActiveStorage
   # documentation that applies to all services.
   class Service::QiniuService < Service
     include QiniuCommon
-    attr_reader :client, :protocol
+    attr_reader :client, :bucket_private
 
     def initialize(host:, secret_key:, access_key:, bucket:, **options)
       @host = host
       @bucket = bucket
-      @protocol = (options.delete(:protocol) || 'https').to_sym
+      @bucket_private = (options.delete(:private) || false)
+      @protocol = (options.delete(:protocol) || 'https').to_s
       @client = Qiniu.establish_connection!(
         access_key: access_key,
         secret_key: secret_key,
@@ -74,7 +75,7 @@ module ActiveStorage
     def download_chunk(key, range)
       instrument :download_chunk, key: key, range: range do
         uri = URI(url(key, attname: key))
-        Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https") do |client|
+        Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |client|
           client.get(uri, 'Range' => "bytes=#{range.begin}-#{range.exclude_end? ? range.end - 1 : range.end}").body
         end
       end
@@ -90,7 +91,7 @@ module ActiveStorage
           options[:fop] = options[:fop] + '&' unless options[:fop].blank? || options[:fop].end_with?('&')
           options[:fop] = options[:fop] + "attname=#{URI.escape(options[:filename].to_s)}"
         end
-        url = Qiniu::Auth.authorize_download_url_2(host, key, fop: options[:fop], expires_in: options[:expires_in], schema: protocol)
+        url = download_url(key, fop: options[:fop], expires_in: options[:expires_in], schema: protocol)
         payload[:url] = url
         url
       end

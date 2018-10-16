@@ -17,6 +17,8 @@ qiniu:
   secret_key: aN44R3yzJFaeswbyM4Y8YaJvnkmsssssssss
   bucket: xxxx 
   notify_url: xxx 
+  private: true
+  protocol: https
 ```
 
 ## Installation

@@ -6,13 +6,11 @@ module QiniuHelper
   extend QiniuCommon
   extend self
   @config ||= Rails.configuration.active_storage['service_configurations'][Rails.configuration.active_storage['service'].to_s]
+  @protocol ||= @config['protocol'] || 'https'
   @host ||= @config['host']
   @bucket ||= @config['bucket']
   @pipeline ||= @config['pipeline']
-
-  def download_url(key, **options)
-    Qiniu::Auth.authorize_download_url_2(host, key, **options)
-  end
+  @bucket_private ||= @config['private']
 
   def upload(local_file, key = nil, **options)
     code, result, response_headers = upload_verbose(local_file, key, options)

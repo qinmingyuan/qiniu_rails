@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'qiniu'
 module QiniuCommon
-  attr_reader :host, :bucket, :config
+  attr_reader :config, :protocol, :host, :bucket, :bucket_private
 
   def upload_verbose(local_file, key = nil, **options)
     code, result, response_headers = Qiniu::Storage.upload_with_token_2(
@@ -11,6 +11,16 @@ module QiniuCommon
       nil,
       bucket: bucket
     )
+  end
+
+  def download_url(key, **options)
+    if bucket_private
+      Qiniu::Auth.authorize_download_url_2(host, key, **options)
+    else
+      url_encoded_key = CGI::escape(key)
+      url = URI::Generic.build(host: host, scheme: protocol, path: '/' + url_encoded_key)
+      url.to_s
+    end
   end
 
   def file_for(prefix = '')
