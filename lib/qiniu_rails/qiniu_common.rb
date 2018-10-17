@@ -19,7 +19,10 @@ module QiniuCommon
     else
       url_encoded_key = CGI::escape(key)
       url = URI::Generic.build(host: host, scheme: protocol, path: '/' + url_encoded_key)
-      url.query = options.slice(:fop).to_query
+      o = options.compact.slice(:fop)
+      if o.present?
+        url.query = o.to_param
+      end
       url.to_s
     end
   end
