@@ -18,7 +18,7 @@ class ActiveSupport::TestCase
   Qiniu.establish_connection!(
     access_key: QiniuHelper.config['access_key'],
     secret_key: QiniuHelper.config['secret_key'],
-    protocal: QiniuHelper.config['protocal']
+    protocol: QiniuHelper.config['protocol']
   )
 
   include FactoryBot::Syntax::Methods

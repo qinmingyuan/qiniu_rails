@@ -16,7 +16,7 @@ module ActiveStorage
       @client = Qiniu.establish_connection!(
         access_key: access_key,
         secret_key: secret_key,
-        protocal: @protocal,
+        protocol: @protocol,
         **options
       )
     end
