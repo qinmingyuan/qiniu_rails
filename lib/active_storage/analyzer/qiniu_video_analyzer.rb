@@ -28,7 +28,8 @@ module ActiveStorage
       end
 
       def duration
-        video_stream['duration']
+        r = streams.map { |i| i['duration'] }
+        r.max
       end
 
       def aspect_ratio
