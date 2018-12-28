@@ -11,7 +11,8 @@ module ActiveStorage
     def initialize(host:, secret_key:, access_key:, bucket:, **options)
       @host = host
       @bucket = bucket
-      @bucket_private = (options.delete(:private) || false)
+      @bucket_private = options.delete(:private) || false
+      @keep = options.delete(:keep) || false
       @protocol = (options.delete(:protocol) || 'https').to_s
       @client = Qiniu.establish_connection!(
         access_key: access_key,
@@ -36,7 +37,7 @@ module ActiveStorage
     def delete(key)
       instrument :delete, key: key do
         begin
-          Qiniu::Storage.delete(bucket, key)
+          Qiniu::Storage.delete(bucket, key) unless @keep
         rescue => e
           puts e.backtrace
         end

@@ -19,6 +19,7 @@ qiniu:
   notify_url: xxx 
   private: true
   protocol: https
+  keep: false # 是否真正删除
 ```
 
 ## Installation
