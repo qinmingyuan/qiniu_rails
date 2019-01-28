@@ -122,6 +122,10 @@ module ActiveStorage
       'POST'
     end
 
+    def direct_upload(key, filename:, content_type:, content_length:, checksum:)
+
+    end
+
     private
     # Reads the object for the given key in chunks, yielding each to the block.
     def stream(key)
