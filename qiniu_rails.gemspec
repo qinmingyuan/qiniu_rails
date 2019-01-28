@@ -19,5 +19,5 @@ Gem::Specification.new do |s|
   ]
 
   s.add_dependency 'qiniu', '~> 6.9'
-  s.add_dependency 'rails', '~> 5.2'
+  s.add_dependency 'rails', '>= 5.2'
 end
