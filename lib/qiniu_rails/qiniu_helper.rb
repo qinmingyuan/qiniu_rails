@@ -31,17 +31,16 @@ module QiniuHelper
     api = "avconcat/2/format/#{format}/index/#{index}/" + urls.join('/')
     fops = api + '|saveas/' + saveas_key
 
-    pfops = Qiniu::Fop::Persistance::PfopPolicy.new(
-      bucket,
-      key,
-      fops,
-      @config['notify_url']
-    )
-    pfops.pipeline = @pipeline
+    pfops(key, fops)
+  end
 
-    code, result, response_headers = Qiniu::Fop::Persistance.pfop(pfops)
-    puts result
-    result
+  def av_watermark(key, wm_url, format: 'mp4', gravity: 'NorthWest', prefix: '01')
+    url = Qiniu::Utils.urlsafe_base64_encode(wm_url)
+    saveas_key = Qiniu::Utils.urlsafe_base64_encode("#{bucket}:#{prefix}_#{key}")
+    api = "avthumb/#{format}/wmImage/#{url}/wmGravity/#{gravity}"
+    fops = api + '|saveas/' + saveas_key
+
+    pfops(key, fops)
   end
 
   def prefop(persistent_id)
@@ -53,6 +52,20 @@ module QiniuHelper
   def avinfo(key)
     code, result, res = Qiniu::HTTP.api_get(download_url(key, fop: 'avinfo'))
     result['streams']
+  end
+
+  def pfops(key, fops)
+    pfops = Qiniu::Fop::Persistance::PfopPolicy.new(
+      bucket,
+      key,
+      fops,
+      @config['notify_url']
+    )
+    pfops.pipeline = @pipeline
+
+    code, result, response_headers = Qiniu::Fop::Persistance.pfop(pfops)
+    puts result
+    result
   end
 
 end
