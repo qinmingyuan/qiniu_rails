@@ -106,6 +106,10 @@ module ActiveStorage
       end
     end
 
+    def method_for_direct_upload
+      'POST'
+    end
+
     def headers_for_direct_upload(key, filename:, content_type:, content_length:, checksum:)
       uptoken = generate_uptoken(key)
       _url = url(key, filename: filename)
@@ -116,14 +120,6 @@ module ActiveStorage
         'Up-Token' => uptoken,
         'Content-Url' => _url
       }
-    end
-
-    def method_for_direct_upload
-      'POST'
-    end
-
-    def direct_upload(key, filename:, content_type:, content_length:, checksum:)
-
     end
 
     private
