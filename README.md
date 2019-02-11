@@ -20,6 +20,7 @@ qiniu:
   private: true
   protocol: https
   keep: false # 是否真正删除
+  block: false # 是否启用分片上传
 ```
 
 ## Installation

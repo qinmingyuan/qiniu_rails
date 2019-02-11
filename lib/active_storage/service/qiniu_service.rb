@@ -13,6 +13,7 @@ module ActiveStorage
       @bucket = bucket
       @bucket_private = options.delete(:private) || false
       @keep = options.delete(:keep) || false
+      @block = options.delete(:block) || false
       @protocol = (options.delete(:protocol) || 'https').to_s
       @client = Qiniu.establish_connection!(
         access_key: access_key,
@@ -101,7 +102,11 @@ module ActiveStorage
     def url_for_direct_upload(key, expires_in:, content_type:, content_length:, checksum:)
       content_length = 4194304 > content_length ? content_length : 4194304
       instrument :url, key: key do |payload|
-        url = Qiniu::Config.up_host(bucket) + "/mkblk/#{content_length}"
+        if @block
+          url = Qiniu::Config.up_host(bucket) + "/mkblk/#{content_length}"
+        else
+          url = Qiniu::Config.up_host(bucket)
+        end
         payload[:url] = url
         url
       end
