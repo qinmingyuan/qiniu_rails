@@ -9,7 +9,7 @@ module QiniuRails::Variant
     "imageView2/1/w/#{w}/h/#{h}"
   end
 
-  def service_url(expires_in: service.url_expires_in, disposition: :inline)
+  def service_url(expires_in: ActiveStorage.service_urls_expire_in, disposition: :inline)
     service.url key, fop: mode_1, expires_in: expires_in, disposition: disposition, filename: filename, content_type: content_type
   end
 
