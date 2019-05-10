@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ActiveStorage
   class Analyzer
     class QiniuVideoAnalyzer < VideoAnalyzer

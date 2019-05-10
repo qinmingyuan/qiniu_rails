@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sprockets/exporters/base'
 
 # Writes a an asset file to Qiniu

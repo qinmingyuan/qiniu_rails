@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sprockets/manifest'
 
 module QiniuNonDigestAssets
@@ -28,4 +30,4 @@ module QiniuNonDigestAssets
 
 end
 
-Sprockets::Manifest.send(:prepend, QiniuNonDigestAssets)
+Sprockets::Manifest.prepend QiniuNonDigestAssets

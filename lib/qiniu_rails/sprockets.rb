@@ -1,5 +1,7 @@
-require 'qiniu_rails/sprockets/qiniu_exporter'
-require 'qiniu_rails/sprockets/qiniu_non_digest_assets'
+# frozen_string_literal: true
+
+require_relative 'sprockets/qiniu_exporter'
+require_relative 'sprockets/qiniu_non_digest_assets'
 
 module Sprockets
 
